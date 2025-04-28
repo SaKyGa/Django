@@ -1,0 +1,39 @@
+{% extends 'base.html'%}
+{% block content %}
+{% load static %}
+<h1 class="mt-5" style="text-align: center;" >
+    Profile
+</h1>
+
+<div class="conteiner">
+    <img src="{{ profile.avatar.url }}" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%;">
+    <h2>{{ user.username }}</h2>
+    <h3>{{ user.email }}</h3>
+    <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+    <h3>{{ user.last_name }}</h3>
+    <h3>{{ profile.age }}</h3>
+    {% for post in posts %}
+<div class="card" style="width: 18rem; ">    
+    {% if post.image %}
+        <img src="{{post.image.url}}" class="card-img-top" alt="...">
+    {% else %}
+        <img src="{% static 'download.png' %}" class="card-img-top" alt="...">
+        {% endif %}
+    <div class="card-body">
+      <h5 class="card-title">{{post.title}}</h5>
+      <p class="card-text">{{post.content}}</p>
+      <p class="card-title">{{post.rate}}</p>
+      <a href="/posts/{{post.id}}" class="btn btn-primary">Go to post</a>
+      <a href="/posts/{{post.id}}/delete" class="btn btn-primary" style="background-color: crimson;">Delete</a>
+    </div>
+  </div>
+{% endfor %}
+<div style="display: flex; justify-content: center; margin-top: 20px; margin-bottom: 20px;">
+  {% for i in max_pages %}
+      <a href="/posts/?page={{ i }}" class="btn btn-primary">
+          {{ i }}
+      </a>
+  {% endfor %}
+</div>
+
+{% endblock %}

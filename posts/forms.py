@@ -1,7 +1,7 @@
 from django import forms
 from posts.models import Category, Post, Tag
 
-class PostForm(forms.Form):
+class PostForm(forms.ModelForm):
     image = forms.ImageField()
     title = forms.CharField()
     content = forms.CharField()

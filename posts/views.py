@@ -68,3 +68,26 @@ def create_post_view(request):
             post.tags.set(tags)
             return redirect("/posts/")
 
+
+@login_required(login_url='/login')
+def post_update_view(request, post_id):
+    post = Post.objects.filter(id=post_id, author=request.user).first()
+    if not post:
+        return HttpResponse("404 Not Found", status=404)
+    if request.method == "GET":
+        form = PostForm2(instance=post)
+        return render(request, "post/post_update.html", context={"form": form})
+    if request.method == "POST":
+        form = PostForm2(request.POST, request.FILES, instance=post)
+        if not form.is_valid():
+            return render(request, "post/post_update.html", context={"form": form})
+        elif form.is_valid():
+            tags = form.cleaned_data.pop("tags")
+            form.save()
+            post.tags.set(tags)
+            return redirect(f"/posts/{post_id}")
+
+@login_required(login_url='/login')
+def post_delete_view(request, post_id):
+    Post.objects.filter(id=post_id).first().delete()
+    return redirect("/profile/")
